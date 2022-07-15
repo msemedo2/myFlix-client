@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import {
+	Button,
+	Card,
+	CardGroup,
+	Container,
+	Col,
+	Row,
+	Form,
+} from 'react-bootstrap';
 export function RegistrationView(props) {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -16,43 +24,39 @@ export function RegistrationView(props) {
 	};
 
 	return (
-		<form>
-			<label>
-				Username:
-				<input
+		<Form>
+			<Form.Group controlId="formUsername">
+				<Form.Label>Username:</Form.Label>
+				<Form.Control
 					type="text"
-					value={username}
 					onChange={(e) => setUsername(e.target.value)}
 				/>
-			</label>
-			<label>
-				Password:
-				<input
+			</Form.Group>
+			<Form.Group controlId="formPassword">
+				<Form.Label>Password:</Form.Label>
+				<Form.Control
 					type="password"
-					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
-			</label>
-			<label>
-				Email:
-				<input
+			</Form.Group>
+			<Form.Group controlId="formEmail">
+				<Form.Label>Email:</Form.Label>
+				<Form.Control
 					type="email"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
+					onChange={(e) => setPassword(e.target.value)}
 				/>
-			</label>
-			<label>
-				BirthDate:
-				<input
+			</Form.Group>
+			<Form.Group controlId="formBirthDate">
+				<Form.Label>BirthDate:</Form.Label>
+				<Form.Control
 					type="date"
-					value={birthdate}
-					onChange={(e) => setBirthDate(e.target.value)}
+					onChange={(e) => setPassword(e.target.value)}
 				/>
-			</label>
-			<button type="submit" onClick={handleSubmit}>
+			</Form.Group>
+			<Button variant="primary" type="submit" onClick={handleSubmit}>
 				Submit
-			</button>
-		</form>
+			</Button>
+		</Form>
 	);
 }
 
