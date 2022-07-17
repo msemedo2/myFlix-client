@@ -1,26 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import './profile-view.scss';
 import PropTypes from 'prop-types';
+import {
+	Form,
+	Button,
+	Card,
+	CardGroup,
+	Container,
+	Col,
+	Row,
+	Modal,
+} from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Container, Col, Row, Button, Card, Form } from 'react-bootstrap';
-import './profile-view.scss';
+import { MovieCard } from '../movie-card/movie-card';
 
-export function ProfileView(props) {
+export function ProfileView({ movies }) {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const [favoriteMovies, setFavoriteMovies] = useState({});
 	const [email, setEmail] = useState('');
 	const [birthdate, setBirthDate] = useState('');
+	const [favoriteMovies, setFavoriteMovies] = useState([]);
+	const [show, setShow] = useState(false); // setting the state for the deleteUser modal
 
-	const [user, setUserData] = useState('');
-	const [movies, setMovies] = useState([]);
-	const User = localStorage.getItem('user');
-	const token = localStorage.getItem('token');
-	const [favoriteMoviesList, setFavoriteMoviesList] = useState([]);
+	useEffect(() => {
+		getUser();
+	}, []);
 
-	const getUserData = () => {
-		let user = localStorage.getItem('user');
+	const getUser = () => {
 		let token = localStorage.getItem('token');
+		let user = localStorage.getItem('user');
 		axios
 			.get(`https://mikeflix2.herokuapp.com/users/${user}`, {
 				headers: { Authorization: `Bearer ${token}` },
@@ -28,54 +37,59 @@ export function ProfileView(props) {
 			.then((response) => {
 				setUsername(response.data.Username);
 				setEmail(response.data.Email);
-				setUserData(response.data);
-				setFavoriteMoviesList(response.data.FavoriteMovies);
-				console.log(response);
-
-				response.data.FavoriteMovies.forEach((movie_id) => {
-					let favMovies = props.movies.filter(
-						(movie) => movie._id === movie_id
-					);
-					setMovies(favMovies);
-				});
+				setFavoriteMovies(response.data.FavoriteMovies);
+				console.log(response.data);
 			})
-			.catch((error) => console.error(error));
+			.catch((e) => {
+				console.log('Error');
+			});
 	};
 
-	// Delete Profile
-	const handleDelete = (e) => {
-		const user = localStorage.getItem('user');
-		const token = localStorage.getItem('token');
-		axios.delete(`https://mikeflix2.herokuapp.com/users/${user}`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
-		alert(`The account ${user.Username} was successfully deleted.`);
-		localStorage.clear();
-		window.open('/register', '_self');
-	};
-	// Update Profile
-	const handleUpdate = () => {
-		let user = localStorage.getItem('user');
+	// Update users info
+	const updateUser = () => {
 		let token = localStorage.getItem('token');
-
+		let user = localStorage.getItem('user');
 		axios
 			.put(
 				`https://mikeflix2.herokuapp.com/users/${user}`,
 				{
 					Username: username,
-					Password: password,
 					Email: email,
 					BirthDate: birthdate,
+					Password: password,
 				},
 				{
-					headers: { Authorization: `Bearer ${token}` },
+					headers: {
+						Authorization: 'Bearer ' + token,
+					},
 				}
 			)
-
 			.then((response) => {
 				alert('Your profile has been updated');
 				localStorage.setItem('user', response.data.Username),
 					console.log(response.data);
+			})
+			.catch((e) => {
+				console.log('Error');
+			});
+	};
+
+	// Delete user
+	const deleteUser = () => {
+		setShowModal(false);
+		let token = localStorage.getItem('token');
+		let user = localStorage.getItem('user');
+		axios
+			.delete(`https://mikeflix2.herokuapp.com/users/${user}`, {
+				headers: {
+					Authorization: 'Bearer ' + token,
+				},
+			})
+			.then((response) => {
+				console.log(response.data);
+				alert('Your profile has been deleted');
+				localStorage.removeItem('user');
+				localStorage.removeItem('token');
 				window.open('/', '_self');
 			})
 			.catch((e) => {
@@ -83,83 +97,119 @@ export function ProfileView(props) {
 			});
 	};
 
-	useEffect(() => {
-		getUserData();
-	}, []);
+	const renderFavorites = () => {
+		console.log(movies);
+		if (movies.length + 0) {
+			return (
+				<Row className="justify-content-md-center">
+					{favoriteMovies.length === 0 ? (
+						<h5>Add some movies to your list</h5>
+					) : (
+						favoriteMovies.map((movieId, i) => (
+							<Col md={6} lg={4}>
+								<MovieCard
+									key={`${i}-${movieId}`}
+									movie={movies.find((m) => m._id == movieId)}
+								/>
+							</Col>
+						))
+					)}
+				</Row>
+			);
+		}
+	};
+
+	// Functions needed to open and close the modal (below) to delete a user
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
+	// Function that contains the modal to delete a users account
+	const cancelUserModal = () => {
+		return (
+			<>
+				<Modal
+					style={{ background: 'transparent' }}
+					show={show}
+					onHide={handleClose}
+				>
+					<Modal.Header closeButton>
+						<Modal.Title>Delete your Account</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>Are you sure you want to delete your account?</Modal.Body>
+					<Modal.Footer>
+						<Button variant="secondary" onClick={handleClose}>
+							Close
+						</Button>
+						<Button variant="primary" onClick={deleteUser}>
+							Delete
+						</Button>
+					</Modal.Footer>
+				</Modal>
+			</>
+		);
+	};
 
 	return (
-		<Container>
-			<Row>
-				<h3>Profile</h3>
-			</Row>
-			<Form>
-				<Form.Group className="mb-3" controlId="username">
-					<Form.Label>Username:</Form.Label>
-					<Form.Control
-						onChange={(e) => setUsername(e.target.value)}
-						value={username}
-						type="text"
-						placeholder="username"
-					/>
-				</Form.Group>
-				<Form.Group className="mb-3" controlId="password">
-					<Form.Label>Password</Form.Label>
-					<Form.Control
-						onChange={(e) => setPassword(e.target.value)}
-						type="password"
-						value={password}
-						placeholder="Password"
-					/>
-				</Form.Group>
-				<Form.Group className="mb-3" controlId="email">
-					<Form.Label>Email address</Form.Label>
-					<Form.Control
-						onChange={(e) => setEmail(e.target.value)}
-						value={email}
-						type="email"
-						placeholder="Enter new email"
-					/>
-				</Form.Group>
-				<Form.Group className="mb-3" controlId="birthdate">
-					<Form.Label>BirthDate:</Form.Label>
-					<Form.Control
-						onChange={(e) => setBirthDate(e.target.value)}
-						value={birthdate}
-						type="date"
-						placeholder="birthdate"
-					/>
-				</Form.Group>
-			</Form>
-			<Button className="mt-2" onClick={handleUpdate}>
-				Update your profile
-			</Button>
-			<Button className="mt-2 ml-4" onClick={handleDelete}>
-				Delete your profile
-			</Button>
-			<h4>Favorite movies:</h4>
-			<Card className="fav-list">
-				<Card.Body>
-					{favoriteMoviesList.map((movie) => {
-						return (
-							<div key={movie._id}>
-								<img src={movie.ImagePath} alt={movie.Title} />
-								<Link to={`/movies/${movie._id}`}>
-									<h4>{movie.Title}</h4>
-								</Link>
-							</div>
-						);
-					})}
-				</Card.Body>
-			</Card>
-		</Container>
+		<>
+			<Container>
+				<h1>Profile Page</h1>
+				<Form>
+					<Form.Group className="mb-3" controlId="username">
+						<Form.Label>Username:</Form.Label>
+						<Form.Control
+							onChange={(e) => setUsername(e.target.value)}
+							value={username}
+							type="text"
+							placeholder="username"
+						/>
+					</Form.Group>
+					<Form.Group className="mb-3" controlId="email">
+						<Form.Label>Email address</Form.Label>
+						<Form.Control
+							onChange={(e) => setEmail(e.target.value)}
+							value={email}
+							type="email"
+							placeholder="Enter new email"
+						/>
+					</Form.Group>
+					<Form.Group className="mb-3" controlId="birthday">
+						<Form.Label>BirthDate:</Form.Label>
+						<Form.Control
+							onChange={(e) => setBirthDate(e.target.value)}
+							value={birthdate}
+							type="date"
+							placeholder="birthday"
+						/>
+					</Form.Group>
+					<Form.Group className="mb-3" controlId="password">
+						<Form.Label>Password</Form.Label>
+						<Form.Control
+							onChange={(e) => setPassword(e.target.value)}
+							type="password"
+							value={password}
+							placeholder="Password"
+						/>
+					</Form.Group>
+
+					<Button className="button ml-2" onClick={updateUser}>
+						Update you profile
+					</Button>
+
+					{/* This button triggers a modal that's called bellow   */}
+					<Button className="deleteButton" variant="link" onClick={handleShow}>
+						Delete your profile
+					</Button>
+				</Form>
+
+				{/* Calling the function that renders the modal to delete the users account */}
+				{cancelUserModal()}
+
+				<p></p>
+				<h2>Favorite Movies:</h2>
+
+				{/* Calling the function that renders the users favorite movies on the profile page */}
+				{renderFavorites()}
+			</Container>
+		</>
 	);
 }
-
-ProfileView.propTypes = {
-	profileView: PropTypes.shape({
-		Username: PropTypes.string.isRequired,
-		Password: PropTypes.string.isRequired,
-		Email: PropTypes.string.isRequired,
-		BirthDate: PropTypes.string,
-	}),
-};
