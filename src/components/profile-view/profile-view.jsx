@@ -76,7 +76,7 @@ export function ProfileView({ movies }) {
 
 	// Delete user
 	const deleteUser = () => {
-		setShowModal(false);
+		setShow(false);
 		let token = localStorage.getItem('token');
 		let user = localStorage.getItem('user');
 		axios
