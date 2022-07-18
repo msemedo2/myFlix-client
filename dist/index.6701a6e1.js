@@ -45623,6 +45623,6 @@ MovieCard.propTypes = {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"8xIwr","./movie-card.scss":"cF5gT","react":"6TuXu","axios":"iYoWk","prop-types":"1tgq3","@parcel/transformer-js/src/esmodule-helpers.js":"5SNX3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"8NXTo","react-bootstrap/":"h2YVd","react-router-dom":"cpyQW"}],"cF5gT":[function() {},{}]},["lUner","jGo4j","dLPEP"], "dLPEP", "parcelRequireaaef")
+},{"react/jsx-runtime":"8xIwr","./movie-card.scss":"cF5gT","react":"6TuXu","axios":"iYoWk","prop-types":"1tgq3","react-router-dom":"cpyQW","@parcel/transformer-js/src/esmodule-helpers.js":"5SNX3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"8NXTo","react-bootstrap/":"h2YVd"}],"cF5gT":[function() {},{}]},["lUner","jGo4j","dLPEP"], "dLPEP", "parcelRequireaaef")
 
 //# sourceMappingURL=index.6701a6e1.js.map
