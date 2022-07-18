@@ -57,7 +57,7 @@ export function RegistrationView(props) {
 				.post('https://mikeflix2.herokuapp.com/users', {
 					Username: username,
 					Password: password,
-					Email: email,
+					email: email,
 					BirthDate: birthdate,
 				})
 				.then((response) => {
@@ -133,7 +133,7 @@ RegistrationView.propTypes = {
 	register: PropTypes.shape({
 		Username: PropTypes.string.isRequired,
 		Password: PropTypes.string.isRequired,
-		Email: PropTypes.string.isRequired,
+		email: PropTypes.string.isRequired,
 		BirthDate: PropTypes.string,
 	}),
 };

@@ -36,7 +36,7 @@ export function ProfileView({ movies }) {
 			})
 			.then((response) => {
 				setUsername(response.data.Username);
-				setEmail(response.data.Email);
+				setEmail(response.data.email);
 				setFavoriteMovies(response.data.FavoriteMovies);
 				console.log(response.data);
 			})
@@ -54,7 +54,7 @@ export function ProfileView({ movies }) {
 				`https://mikeflix2.herokuapp.com/users/${user}`,
 				{
 					Username: username,
-					Email: email,
+					email: email,
 					BirthDate: birthdate,
 					Password: password,
 				},

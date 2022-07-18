@@ -44514,7 +44514,7 @@ function RegistrationView(props) {
         if (isReq) _axiosDefault.default.post('https://mikeflix2.herokuapp.com/users', {
             Username: username,
             Password: password,
-            Email: email,
+            email: email,
             BirthDate: birthdate
         }).then((response)=>{
             const data = response.data;
@@ -44709,7 +44709,7 @@ RegistrationView.propTypes = {
     register: _propTypesDefault.default.shape({
         Username: _propTypesDefault.default.string.isRequired,
         Password: _propTypesDefault.default.string.isRequired,
-        Email: _propTypesDefault.default.string.isRequired,
+        email: _propTypesDefault.default.string.isRequired,
         BirthDate: _propTypesDefault.default.string
     })
 };
@@ -45169,7 +45169,7 @@ function ProfileView({ movies  }) {
             }
         }).then((response)=>{
             setUsername(response.data.Username);
-            setEmail(response.data.Email);
+            setEmail(response.data.email);
             setFavoriteMovies(response.data.FavoriteMovies);
             console.log(response.data);
         }).catch((e)=>{
@@ -45182,7 +45182,7 @@ function ProfileView({ movies  }) {
         let user = localStorage.getItem('user');
         _axiosDefault.default.put(`https://mikeflix2.herokuapp.com/users/${user}`, {
             Username: username,
-            Email: email,
+            email: email,
             BirthDate: birthdate,
             Password: password
         }, {
@@ -45530,7 +45530,7 @@ $RefreshReg$(_c, "ProfileView");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"8xIwr","react":"6TuXu","axios":"iYoWk","./profile-view.scss":"gb0ga","react-bootstrap":"h2YVd","@parcel/transformer-js/src/esmodule-helpers.js":"5SNX3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"8NXTo","../movie-card/movie-card":"6EiBJ","prop-types":"1tgq3","react-router-dom":"cpyQW"}],"gb0ga":[function() {},{}],"6EiBJ":[function(require,module,exports) {
+},{"react/jsx-runtime":"8xIwr","react":"6TuXu","prop-types":"1tgq3","axios":"iYoWk","react-router-dom":"cpyQW","./profile-view.scss":"gb0ga","react-bootstrap":"h2YVd","@parcel/transformer-js/src/esmodule-helpers.js":"5SNX3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"8NXTo","../movie-card/movie-card":"6EiBJ"}],"gb0ga":[function() {},{}],"6EiBJ":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$4249 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -45623,6 +45623,6 @@ MovieCard.propTypes = {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"8xIwr","./movie-card.scss":"cF5gT","react":"6TuXu","axios":"iYoWk","prop-types":"1tgq3","react-router-dom":"cpyQW","@parcel/transformer-js/src/esmodule-helpers.js":"5SNX3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"8NXTo","react-bootstrap/":"h2YVd"}],"cF5gT":[function() {},{}]},["lUner","jGo4j","dLPEP"], "dLPEP", "parcelRequireaaef")
+},{"react/jsx-runtime":"8xIwr","./movie-card.scss":"cF5gT","react":"6TuXu","axios":"iYoWk","prop-types":"1tgq3","@parcel/transformer-js/src/esmodule-helpers.js":"5SNX3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"8NXTo","react-bootstrap/":"h2YVd","react-router-dom":"cpyQW"}],"cF5gT":[function() {},{}]},["lUner","jGo4j","dLPEP"], "dLPEP", "parcelRequireaaef")
 
 //# sourceMappingURL=index.6701a6e1.js.map
