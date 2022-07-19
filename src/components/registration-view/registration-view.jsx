@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-
-import { Form, Button } from 'react-bootstrap';
-
+import {
+	Form,
+	Button,
+	Card,
+	Container,
+	Col,
+	Row,
+	CardGroup,
+} from 'react-bootstrap';
 import './registration-view.scss';
 
-export function RegistrationView(props) {
+export function RegistrationView() {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [email, setEmail] = useState('');
@@ -20,30 +26,30 @@ export function RegistrationView(props) {
 	const validate = () => {
 		let isReq = true;
 		if (!username) {
-			setValues({ ...values, usernameErr: 'Username Required' });
+			setValues({ ...values, usernameErr: 'Username required' });
 			isReq = false;
 		} else if (username.length < 5) {
 			setValues({
 				...values,
-				usernameErr: 'Username must be 5 characters long',
+				usernameErr: 'Username must be at least 5 characters long',
 			});
 			isReq = false;
 		}
 		if (!password) {
-			setValues({ ...values, passwordErr: 'Password Required' });
+			setValues({ ...values, passwordErr: 'Password required' });
 			isReq = false;
-		} else if (password.length < 6) {
+		} else if (password.match(/[^0-9a-z]/i)) {
 			setValues({
 				...values,
-				passwordErr: 'Password must be 6 characters long',
+				passwordErr: 'Password may only contain letters and digits',
 			});
 			isReq = false;
 		}
 		if (!email) {
-			setValues({ ...values, emailErr: 'Email Required' });
+			setValues({ ...values, emailErr: 'Email required' });
 			isReq = false;
 		} else if (email.indexOf('@') === -1) {
-			setValues({ ...values, emailErr: 'Email is invalid' });
+			setValues({ ...values, emailErr: 'Enter valid email' });
 			isReq = false;
 		}
 		return isReq;
@@ -63,69 +69,79 @@ export function RegistrationView(props) {
 				.then((response) => {
 					const data = response.data;
 					console.log(data);
-					alert('Registration successful, please login!');
-					window.open('/', '_self'); // the second argument is necessary so that the page will open in the current tab
+					alert('Registration successful, please login.');
+					//_self keeps page from opening into a new tab
+					window.open('/', '_self');
 				})
 				.catch((response) => {
 					console.error(response);
-					alert('unable to register');
+					alert('Unable to register.');
 				});
 		}
 	};
 
 	return (
-		<Form>
-			<h2 className="mb-3 mx-auto mt-5">MikeFlix Registration</h2>
-
-			<Form.Group className="mb-3 mx-auto mt-4" controlId="formUsername">
-				<Form.Label>Username:</Form.Label>
-				<Form.Control
-					type="text"
-					value={username}
-					onChange={(e) => setUsername(e.target.value)}
-					required
-					placeholder="Enter a username"
-				/>
-				{values.usernameErr && <p>{values.usernameErr}</p>}
-			</Form.Group>
-
-			<Form.Group className="mb-3 mx-auto mt-4">
-				<Form.Label>Password:</Form.Label>
-				<Form.Control
-					type="password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					required
-					minLength="6"
-					placeholder="Password must be 6 characters long"
-				/>
-				{values.passwordErr && <p>{values.passwordErr}</p>}
-			</Form.Group>
-
-			<Form.Group className="mb-3 mx-auto mt-4">
-				<Form.Label>Email:</Form.Label>
-				<Form.Control
-					type="email"
-					value={email}
-					required
-					onChange={(e) => setEmail(e.target.value)}
-				/>
-				{values.emailErr && <p>{values.emailErr}</p>}
-			</Form.Group>
-
-			<Form.Group className="mb-3 mx-auto mt-4">
-				<Form.Label>BirthDate:</Form.Label>
-				<Form.Control
-					type="date"
-					value={birthdate}
-					onChange={(e) => setBirthDate(e.target.value)}
-				/>
-			</Form.Group>
-
-			<Button className="mt-4" type="submit" onClick={handleSubmit}>
-				Register
-			</Button>
-		</Form>
+		<Container className="registration-form">
+			<Row className="justify-content-center">
+				<Col>
+					<Form className="registration-form bg-col lining">
+						<Form.Group className="mb-4" controlId="formUsername">
+							<Form.Label>Username:</Form.Label>
+							<Form.Control
+								type="text"
+								value={username}
+								onChange={(e) => setUsername(e.target.value)}
+								placeholder="Username"
+								required
+							/>
+							{values.usernameErr && <p>{values.usernameErr}</p>}
+						</Form.Group>
+						<Form.Group className="mb-4" controlId="formPassword">
+							<Form.Label>Password:</Form.Label>
+							<Form.Control
+								type="password"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								placeholder="Password"
+								required
+							/>
+							{values.passwordErr && <p>{values.passwordErr}</p>}
+						</Form.Group>
+						<Form.Group className="mb-4" controlId="formEmail">
+							<Form.Label>Email:</Form.Label>
+							<Form.Control
+								type="text"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								placeholder="your@mail.com"
+								required
+							/>
+							{values.emailErr && <p>{values.emailErr}</p>}
+						</Form.Group>
+						<Form.Group className="mb-4" controlId="formBirthDate">
+							<Form.Label>BirthDate:</Form.Label>
+							<Form.Control
+								type="text"
+								value={birthdate}
+								onChange={(e) => setBirthDate(e.target.value)}
+								placeholder="YYYY-MM-DD"
+							/>
+						</Form.Group>
+						<Row className="mt-4 justify-content-start">
+							<Col sm="10" md="8" lg="6">
+								<Button
+									className="reg-button"
+									type="submit"
+									onClick={handleSubmit}
+								>
+									Register
+								</Button>
+							</Col>
+						</Row>
+					</Form>
+				</Col>
+			</Row>
+		</Container>
 	);
 }
 
@@ -133,7 +149,7 @@ RegistrationView.propTypes = {
 	register: PropTypes.shape({
 		Username: PropTypes.string.isRequired,
 		Password: PropTypes.string.isRequired,
-		email: PropTypes.string.isRequired,
-		BirthDate: PropTypes.string,
+		Email: PropTypes.string.isRequired,
+		BirthDate: PropTypes.number.isRequired,
 	}),
 };
