@@ -1,13 +1,55 @@
-.my-flix {
-  color: steelblue;
+html {
+  background-color: #141414;
 }
 
+.container {
+  background-color: #141414;
+}
 
+.app-container {
+  background-color: #141414;
+  height: 100vh;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 
+p {
+  color: #fff;
+}
+.card-text {
+  color: black;
+}
+.form-label {
+  color: #fff;
+}
 
+.btn {
+  color: #141414 !important;
+  background-color: #fff !important;
+  border: 1px solid #fff !important;
+}
 
+.btn:hover {
+  color: #fff !important;
+  background-color: #141414 !important;
+}
 
+.navbar-logo {
+  color: #e50914;
+  font-size: 3rem;
+}
 
+.nav-link {
+  color: #fff !important;
+}
+.genre-view {
+  color: #fff;
+}
+.director-view {
+  color: #fff;
+}
 
+.form-label {
+  color: #000;
+}
 
 /*# sourceMappingURL=index.caa67093.css.map */
