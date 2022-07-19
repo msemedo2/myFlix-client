@@ -1,133 +1,94 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { setState } from 'react';
 import axios from 'axios';
-
-import { Link } from 'react-router-dom';
-import { Button, Container, Row, Col } from 'react-bootstrap';
-
+import { Button, Card } from 'react-bootstrap';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './movie-view.scss';
 
 export class MovieView extends React.Component {
-	constructor() {
-		super();
+	addToFavs = (event) => {
+		event.preventDefault();
 
-		this.state = {
-			movies: [],
-			user: null,
-		};
-	}
-
-	addMovie(movie, user) {
-		let username = localStorage.getItem('user');
-		let token = localStorage.getItem('token');
-		console.log(movie);
-		console.log(token);
+		const username = localStorage.getItem('user');
+		const token = localStorage.getItem('token');
 
 		axios
 			.post(
-				`https://mikeflix2.herokuapp.com/users/${username}/movies/${movie._id}`,
+				`https://mikeflix2.herokuapp.com/users/${username}/movies/${this.props.movie._id}`,
 				{},
 				{ headers: { Authorization: `Bearer ${token}` } }
 			)
-			.then((response) => {
-				console.log(response.data);
-				alert(`${movie.Title} has been added from your list.`);
+			.then(() => {
+				alert(`${this.props.movie.Title} was added to your favorites list`);
 			})
-			.catch(function (error) {
-				console.log(error);
-			});
-	}
-
-	delFavMovie = (movie, user) => {
-		let token = localStorage.getItem('token');
-		let username = localStorage.getItem('user');
-		console.log(movie);
-		console.log(token);
-		axios
-			.delete(
-				`https://mikeflix2.herokuapp.com/users/${username}/movies/${movie._id}`,
-				{
-					headers: { Authorization: `Bearer ${token}` },
-				}
-			)
-			.then((response) => {
-				console.log(response.data);
-				alert(`${movie.Title} has been removed from your list.`);
-			})
-			.catch((e) => {
-				console.log('Error');
+			.catch((err) => {
+				console.log(err);
 			});
 	};
 
 	render() {
-		const { movie, user, onBackClick } = this.props;
+		if (!this.props?.user || !this.props.movie) return <div />;
+		const { movie, onBackClick } = this.props;
+		console.log('single movie view: ', movie);
 
 		return (
-			<Container className="movie-view">
-				<Row>
-					<Col className="movie-poster">
-						<img src={movie.ImagePath} crossOrigin="anonymous" />
-					</Col>
-				</Row>
-				<Row className="movie-title">
-					<Col className="label">Title: </Col>
-					<Col className="value">{movie.Title}</Col>
-				</Row>
-				<Row className="movie-description">
-					<Col className="label">Description: </Col>
-					<Col className="value">{movie.Description}</Col>
-				</Row>
-				<Row>
+			<Card className="indiv-view  movie-view">
+				<Card.Img
+					className="bg-col indiv-img"
+					variant="top"
+					crossOrigin="anonymous"
+					src={movie.ImagePath}
+				/>
+				<Card.Header>
+					<Card.Title className="indiv-title">{movie.Title}</Card.Title>
+				</Card.Header>
+				<Card.Body className="bg-col">
+					<Card.Text>{movie.Description}</Card.Text>
+					<Card.Text>
+						<strong>Director: </strong>
+						{movie.Director.Name}
+					</Card.Text>
+					<Route
+						path=".movies/:movieId"
+						render={({ match, history }) => {
+							return (
+								<Col md={8}>
+									<MovieView
+										movie={movie.find((m) => m._id === match.params.movieId)}
+										onBackClick={() => history.goBack()}
+									/>
+								</Col>
+							);
+						}}
+					/>
 					<Link to={`/directors/${movie.Director.Name}`}>
-						<Button variant="link">Director</Button>
+						<Button className="button" variant="secondary">
+							Director
+						</Button>
 					</Link>
 					<Link to={`/genres/${movie.Genre.Name}`}>
-						<Button variant="link">Genre</Button>
+						<Button className="button" variant="secondary">
+							Genre
+						</Button>
 					</Link>
-				</Row>
-				<Button
-					className=""
-					onClick={() => {
-						onBackClick(null);
-					}}
-				>
-					Back
-				</Button>
-				<Button
-					className="button ml-2"
-					onClick={() => {
-						this.addMovie(movie, user);
-					}}
-				>
-					Add to favorites
-				</Button>
-				<Button
-					className="button ml-2"
-					onClick={() => {
-						this.delFavMovie(movie, user);
-					}}
-				>
-					Remove from favorites
-				</Button>
-			</Container>
+					<Button
+						className="button"
+						onClick={() => {
+							onBackClick(null);
+						}}
+					>
+						Back
+					</Button>
+					<Button
+						className="button button-add-favs"
+						variant="outline-secondary"
+						title="Add to My Favorites"
+						onClick={(event) => this.addToFavs(event)}
+					>
+						{' '}
+						&#x2764;
+					</Button>
+				</Card.Body>
+			</Card>
 		);
 	}
 }
-
-MovieView.propTypes = {
-	movie: PropTypes.shape({
-		Title: PropTypes.string.isRequired,
-		Description: PropTypes.string.isRequired,
-		Genre: PropTypes.shape({
-			Name: PropTypes.string.isRequired,
-			Description: PropTypes.string.isRequired,
-		}),
-		Director: PropTypes.shape({
-			Name: PropTypes.string.isRequired,
-			Bio: PropTypes.string.isRequired,
-			BirthDate: PropTypes.string.isRequired,
-			Death: PropTypes.string,
-		}),
-		ImagePath: PropTypes.string.isRequired,
-	}).isRequired,
-};
