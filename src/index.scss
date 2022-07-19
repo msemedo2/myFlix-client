@@ -1,5 +1,17 @@
-$color: steelblue;
+html {
+	background-color: #141414;
+}
 
-.my-flix {
-	color: $color;
+.container {
+	background-color: #141414;
+}
+
+.app-container {
+	background-color: #141414;
+	height: 100vh;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+p {
+	color: #fff;
 }
