@@ -1,45 +1,29 @@
 import React from 'react';
-import { Button, Card } from 'react-bootstrap/';
 import PropTypes from 'prop-types';
-import axios from 'axios';
+import { Card, Row, Col } from 'react-bootstrap';
+
 import { Link } from 'react-router-dom';
 
 import './movie-card.scss';
+
 export class MovieCard extends React.Component {
-	addMovie(movie, user) {
-		const username = localStorage.getItem('user');
-		const token = localStorage.getItem('token');
-		console.log(movie);
-		console.log(token);
-
-		axios
-			.post(
-				`https://mikeflix2.herokuapp.com/users/${username}/movies/${movie._id}`,
-				{},
-				{ headers: { Authorization: `Bearer ${token}` } }
-			)
-			.then((response) => {
-				this.setState({
-					user: response.data,
-				});
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
-	}
-
 	render() {
-		const { movie, user } = this.props;
-
+		const { movie } = this.props;
+		console.log(movie);
 		return (
-			<Card id="movie-card">
+			<Card className="cards bg-col">
 				<Link to={`/movies/${movie._id}`}>
 					<Card.Img
+						className="cards-img bg-col"
 						variant="top"
-						src={movie.ImagePath}
 						crossOrigin="anonymous"
+						src={movie.ImagePath}
 					/>
 				</Link>
+				<Card.Header>
+					<Card.Title className="cards-title">{movie.Title}</Card.Title>
+				</Card.Header>
+				<Card.Body className="bg-col"></Card.Body>
 			</Card>
 		);
 	}
@@ -49,16 +33,14 @@ MovieCard.propTypes = {
 	movie: PropTypes.shape({
 		Title: PropTypes.string.isRequired,
 		Description: PropTypes.string.isRequired,
-		ImagePath: PropTypes.string.isRequired,
 		Genre: PropTypes.shape({
 			Name: PropTypes.string.isRequired,
-			Description: PropTypes.string.isRequired,
-		}),
+		}).isRequired,
 		Director: PropTypes.shape({
 			Name: PropTypes.string.isRequired,
-			Bio: PropTypes.string.isRequired,
-			BirthDate: PropTypes.string.isRequired,
-			Death: PropTypes.string,
-		}),
+		}).isRequired,
+		Actors: PropTypes.arrayOf(PropTypes.string).isRequired,
+		ImagePath: PropTypes.string.isRequired,
+		Featured: PropTypes.bool.isRequired,
 	}).isRequired,
 };
