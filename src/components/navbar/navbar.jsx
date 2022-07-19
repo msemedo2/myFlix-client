@@ -1,10 +1,12 @@
 import React from 'react';
+import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 
-import { Container, Navbar, Nav, Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { setUser } from '../../actions/actions';
 
 import './navbar.scss';
 
-export function Menu({ user }) {
+export function MenuBar({ user }) {
 	const onLoggedOut = () => {
 		localStorage.clear();
 		window.open('/', '_self');
@@ -22,21 +24,39 @@ export function Menu({ user }) {
 	};
 
 	return (
-		<Navbar className="main-nav" expand="lg">
-			{/* <Container> */}
-			<Navbar.Brand className="text-light">MikeFlix</Navbar.Brand>
-			<Navbar.Toggle aria-controls="basic-navbar-nav" />
-			<Navbar.Collapse id="basic-navbar-nav">
-				<Nav className="ml-auto">
-					{isAuth() && <Nav.Link href="/">Home</Nav.Link>}
-					{isAuth() && <Nav.Link href={`/users/${user}`}>{user}</Nav.Link>}
-
-					{isAuth() && <Button onClick={onLoggedOut}>Logout</Button>}
-					{!isAuth() && <Nav.Link href="/">Sign-in</Nav.Link>}
-					{!isAuth() && <Nav.Link href="/register">Sign-up</Nav.Link>}
-				</Nav>
-			</Navbar.Collapse>
-			{/* </Container> */}
+		<Navbar className="main-nav" expand="sm">
+			<Container>
+				<Navbar className="navbar-logo" href="/">
+					MikeFlix
+				</Navbar>
+				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
+				<Navbar.Collapse id="responsive-navbar-nav">
+					<Nav className="ml-auto">
+						{isAuth() && <Nav.Link href={`/users/${user}`}>{user}</Nav.Link>}
+						{isAuth() && (
+							<Button
+								variant="link"
+								onClick={() => {
+									onLoggedOut();
+								}}
+							>
+								Logout
+							</Button>
+						)}
+						{!isAuth() && <Nav.Link href="/">Login</Nav.Link>}
+						{!isAuth() && <Nav.Link href="/register">Register</Nav.Link>}
+					</Nav>
+				</Navbar.Collapse>
+			</Container>
 		</Navbar>
 	);
 }
+
+let mapStateToProps = (state) => {
+	return {
+		movies: state.movies,
+		user: state.user,
+	};
+};
+
+export default connect(mapStateToProps, { setUser })(MenuBar);
