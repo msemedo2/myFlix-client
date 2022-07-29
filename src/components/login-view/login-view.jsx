@@ -63,7 +63,6 @@ export function LoginView(props) {
 				})
 				.catch((e) => {
 					alert('That did not work. Please try again.');
-					console.log('no such user');
 				});
 		}
 	};

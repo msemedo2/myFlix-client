@@ -38,15 +38,12 @@ class MainView extends React.Component {
 	componentDidMount() {
 		const accessToken = localStorage.getItem('token');
 		const user = localStorage.getItem('user');
-		console.log(accessToken);
 		if (accessToken !== null) {
-			console.log('before axios');
 			axios
 				.get(`https://mikeflix2.herokuapp.com/users/${user}`, {
 					headers: { Authorization: `Bearer ${accessToken}` },
 				})
 				.then((res) => {
-					console.log(res);
 					const fullUser = res.data;
 					this.setState({
 						fullUser: fullUser,
@@ -54,9 +51,7 @@ class MainView extends React.Component {
 					});
 					this.getMovies(accessToken);
 				})
-				.catch(function (error) {
-					console.log(error);
-				});
+				.catch(function (error) {});
 		}
 	}
 
@@ -69,7 +64,6 @@ class MainView extends React.Component {
 	}
 
 	getMovies(token) {
-		console.log('get movies', token);
 		axios
 			.get('https://mikeflix2.herokuapp.com/movies', {
 				headers: { Authorization: `Bearer ${token}` },
@@ -79,13 +73,10 @@ class MainView extends React.Component {
 					movies: response.data,
 				});
 			})
-			.catch(function (error) {
-				console.log(error);
-			});
+			.catch(function (error) {});
 	}
 
 	onLoggedIn(authData) {
-		console.log(authData);
 		this.setState({
 			user: authData.user.Username,
 		});
@@ -107,7 +98,6 @@ class MainView extends React.Component {
 	render() {
 		if (!this.state) return <>loading...</>;
 		const { movies, user } = this.state;
-		console.log('logged in: ', user);
 
 		return (
 			<Router>

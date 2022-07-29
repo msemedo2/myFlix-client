@@ -9,7 +9,6 @@ import './movie-card.scss';
 export class MovieCard extends React.Component {
 	render() {
 		const { movie } = this.props;
-		console.log(movie);
 		return (
 			<Card className="cards bg-col">
 				<Link to={`/movies/${movie._id}`}>

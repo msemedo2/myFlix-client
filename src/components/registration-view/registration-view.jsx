@@ -68,7 +68,6 @@ export function RegistrationView() {
 				})
 				.then((response) => {
 					const data = response.data;
-					console.log(data);
 					alert('Registration successful, please login.');
 					//_self keeps page from opening into a new tab
 					window.open('/', '_self');

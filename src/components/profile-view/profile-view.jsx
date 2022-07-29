@@ -49,9 +49,7 @@ class ProfileView extends React.Component {
 					FavoriteMovies: response.data.FavoriteMovies,
 				});
 			})
-			.catch(function (error) {
-				console.log(error);
-			});
+			.catch(function (error) {});
 	}
 
 	//Sends a PUT request to API and the response sets the state to update user info.
@@ -86,15 +84,12 @@ class ProfileView extends React.Component {
 			});
 	};
 
-	//Sends a DELETE request to API and console.log message indicates success
+	//Sends a DELETE request to API
 	removeFromFavorite = (event, movie) => {
 		event.preventDefault();
 
-		console.log('removing from favorites: ', movie, this.props.user);
-
 		const username = localStorage.getItem('user');
 		const token = localStorage.getItem('token');
-		console.log('remove fav auth: ', token);
 
 		axios
 			.delete(
@@ -107,12 +102,10 @@ class ProfileView extends React.Component {
 				this.setState({ FavoriteMovies: res?.data?.FavoriteMovies });
 				this.props.remFavMovie(res?.data);
 			})
-			.catch((err) => {
-				console.log(err);
-			});
+			.catch((err) => {});
 	};
 
-	//Sends DELETE request to API and console.log message indicates success
+	//Sends DELETE request to API
 	removeUser() {
 		const Username = localStorage.getItem('user');
 		const token = localStorage.getItem('token');
@@ -123,11 +116,8 @@ class ProfileView extends React.Component {
 			.then(() => {
 				localStorage.removeItem('user');
 				localStorage.removeItem('token');
-				console.log('Profile has been deleted');
 			})
-			.catch(function (error) {
-				console.log(error);
-			});
+			.catch(function (error) {});
 	}
 
 	setUsername(value) {

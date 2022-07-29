@@ -20,15 +20,12 @@ export class MovieView extends React.Component {
 			.then(() => {
 				alert(`${this.props.movie.Title} was added to your favorites list`);
 			})
-			.catch((err) => {
-				console.log(err);
-			});
+			.catch((err) => {});
 	};
 
 	render() {
 		if (!this.props?.user || !this.props.movie) return <div />;
 		const { movie, onBackClick } = this.props;
-		console.log('single movie view: ', movie);
 
 		return (
 			<Card className="indiv-view  movie-view">
